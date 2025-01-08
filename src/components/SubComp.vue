@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 
-const title = ref<string>('Hello from sub-component!')
+const props = defineProps({
+  title: String,
+  color: {
+    type: String,
+    default: 'rebeccapurple',
+    required: false
+  }
+})
 </script>
 
 <template>
-  <h2>{{ title }}</h2>
+  <h2 :style="{color: color}">{{ props.title }}</h2>
 </template>
-
-<style scoped>
-h2 {
-  color: rebeccapurple;
-}
-</style>
