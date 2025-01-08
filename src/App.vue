@@ -3,24 +3,44 @@ import { ref, watch } from 'vue'
 
 const title = ref<string>('Bienvenue sur Vue 3')
 
-const x = ref<number>(0)
-const debug = ref<string>('')
-const locked = ref<boolean>(false)
+const question = ref<string>('')
+const answer = ref<string>('Une question possède un point d’interrogation (?)')
+const image = ref<string>('')
+const loading = ref<boolean>(false)
 
-// Utilisation de watch pour observer une variable
-watch(x, (newX, oldX) => {
-  debug.value = `x = ${newX} (ancienne valeur : ${oldX})`
-  locked.value = newX > 5;
+type Result = {
+  answer: string
+  forced: boolean
+  image: string
+}
+
+watch(question, async (newQuestion: string) => {
+  if (newQuestion.includes('?')) {
+    answer.value = 'Je réfléchis…'
+    try {
+      loading.value = true
+      const res = await fetch('https://yesno.wtf/api')
+      const obj: Result = await res.json()
+      answer.value = obj.answer
+      image.value = obj.image
+    } catch (error) {
+      answer.value = 'Désolé, je n’ai pas pu répondre à votre question.'
+    } finally {
+      loading.value = false
+    }
+  }
 })
-
-
 </script>
 
 <template>
   <main>
     <h1>{{ title }}</h1>
-    <p>{{ debug }}</p>
-    <input type="number" v-model="x" :disabled="locked" />
+    <p>
+      <label for="question">Votre question : </label>
+      <input name="question" v-model="question" placeholder="Posez une question">
+    </p>
+    <p>{{ answer }}</p>
+    <p v-if="image"><img :src="image" alt="" /></p>
   </main>
 </template>
 
