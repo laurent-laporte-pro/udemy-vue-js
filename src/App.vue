@@ -1,49 +1,74 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-let keyCount = 0
+import { computed, ref } from 'vue'
 
 const title = ref<string>('Bienvenue sur Vue 3')
+const firstName = ref('Laurent')
+const lastName = ref('Laporte')
 
-type Item = { key: number, name: string }
+const fullName = computed(() => `${firstName.value} ${lastName.value.toUpperCase()}`)
 
-const items = ref<Item[]>([])
+const price = ref(123)
+const discountPercent = ref(10)
+const finalPrice = computed(() => price.value * (1 - discountPercent.value / 100))
 
-const itemName = ref<string>('')
+const fullName2 = computed({
+  get: () => {
+    if (lastName.value) {
+      return `${firstName.value} ${lastName.value.toUpperCase()}`
+    } else {
+      return firstName.value
+    }
+  },
+  set: (value: string) => {
+    if (!value.includes(' ')) {
+      firstName.value = value
+      lastName.value = ''
+    } else {
+      const parts = value.split(' ')
+      firstName.value = parts[0]
+      lastName.value = parts[1].charAt(0).toUpperCase() + parts[1].slice(1).toLowerCase()
+    }
+  }
+})
 
-const addItem = (name: string) => {
-  if (!name) return
-  const newItem: Item = { 'key': ++keyCount, 'name': name }
-  items.value.push(newItem)
-}
-
-const removeItem = (key: number) => {
-  items.value = items.value.filter(item => item.key !== key)
-}
-
-const handleSubmit = (event: Event) => {
-  event.preventDefault()
-  addItem(itemName.value)
-  itemName.value = ''
-}
 </script>
 
 <template>
   <main>
     <h1>{{ title }}</h1>
-    <p v-if="items.length === 0"><em>Aucun élément</em></p>
-    <ul v-else>
-      <li v-for="item in items" :key="item.key">{{ item.name }}
-        <button type="button" @click="removeItem(item.key)">🗑️</button>
-      </li>
-    </ul>
-    <form name="addItem" @submit="handleSubmit">
-      <label for="itemName" title="Nom de l’élément à ajouter">Nom :</label> <input
-        v-model="itemName" placeholder="Nom" name="itemName" />
-      <button type="submit">Ajouter</button>
-    </form>
+    <p><strong>Nom :</strong> {{ lastName }}, <strong>Prénom :</strong> {{ firstName }}</p>
+    <p>{{ fullName }}</p>
+    <p>{{ fullName2 }}</p>
+    <p><label for="name">Modifier le nom :</label> <input name="name" v-model="fullName2" placeholder="Prénom Nom"></p>
+    <table>
+      <tr>
+        <th>Prix</th>
+        <th>Réduction</th>
+        <th>Prix final</th>
+      </tr>
+      <tr>
+        <td class="currency">{{ price }}</td>
+        <td class="percent">{{ discountPercent }}</td>
+        <td class="currency">{{ finalPrice }}</td>
+      </tr>
+    </table>
   </main>
 </template>
 
 <style scoped>
+.currency {
+  text-align: right;
+}
+
+.currency::after {
+  content: ' €';
+}
+
+.percent {
+  text-align: right;
+}
+
+.percent::after {
+  content: ' %';
+}
 </style>
