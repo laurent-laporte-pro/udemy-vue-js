@@ -13,13 +13,41 @@
 <body>
 
 <section id="app">
-  <nav>
-    <button @click="resetGrid">Vider la grille</button>
-    <button @click="exportGrid">Exporter la grille</button>
-    <button @click="zoomOut">Zoom -</button>
-    <button @click="zoomIn">Zoom +</button>
-    <input type="file" @change="loadImage" accept="image/*" placeholder="Charger une image">
-  </nav>
+  <header>
+    <aside>
+      <input type="checkbox" id="chkColorMode" v-model="colorMode">
+      <label for="chkColorMode">Activer le mode coloration</label>
+    </aside>
+  </header>
+
+  <article id="container" :style="`zoom: ${zoom}%`">
+    <!-- Indices du haut -->
+    <div id="caseIndiceT_First"></div>
+    <div class="caseIndiceT noselect" v-for="c in 25" :key="c" :id="`indiceT_${c}`"></div>
+
+    <!-- Grille -->
+    <div class="ligne" v-for="l in 25" :key="l">
+      <span v-for="c in 25" :key="c">
+        <!-- Indices de gauche -->
+        <div class="caseIndiceL noselect" v-if="c === 1" :id="`indiceL_${l}`"></div>
+        <!-- Cases de la ligne -->
+        <div class="case" :id="`case_${l}_${c}`"
+             @mousedown="mouseDown"
+             @mouseup="mouseUp"
+             @mouseover="colorize"></div>
+      </span>
+    </div>
+  </article>
+
+  <footer>
+    <nav>
+      <button @click="resetGrid">Vider la grille</button>
+      <button @click="exportGrid">Exporter la grille</button>
+      <button @click="zoomOut">Zoom -</button>
+      <button @click="zoomIn">Zoom +</button>
+      <input type="file" @change="loadImage" accept="image/*" placeholder="Charger une image">
+    </nav>
+  </footer>
 
   <canevas width="25" height="25" id="previewCanevas">
     Désolé, votre navigateur ne supporte pas les canevas HTML5.
@@ -41,6 +69,15 @@
         return {
           zoom: 75,
           isMouseDown: false,
+          colorMode: true,
+          // Pour stocker les cases colorées
+          coloredCells: [],
+          coloredCellsLoaded: [],
+          // Pour stocker les indices de la grille
+          tableauColDeCases: [],
+          tableauLigDeCases: [],
+          casesIndiceT: [],
+          casesIndiceL: [],
         }
       },
       methods: {
@@ -70,9 +107,23 @@
         mouseUp: function (event) {
           this.isMouseDown = false
         },
+        colorize: function (event) {
+          if (this.isMouseDown) {
+            const targetId = event.currentTarget.id
+            const targetDiv = event.target
+            if (this.colorMode) {
+              targetDiv.classList.add('blackBg')
+              this.coloredCells.push(targetDiv)
+            } else {
+              targetDiv.classList.remove('blackBg')
+            }
+          }
+        },
       },
       mounted() {
-        console.log('Vue est monté !')
+        // Init top and left cells
+        self.casesIndiceT = document.querySelectorAll('.caseIndiceT')
+        self.casesIndiceL = document.querySelectorAll('.caseIndiceL')
       },
     })
     // Monter l'application
