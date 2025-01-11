@@ -2,54 +2,54 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Jeu de Picross</title>
   <script defer src="vue.global.prod.js"></script>
   <script defer src="html2canvas.min.js"></script>
-  <link type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
-        rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+        rel="stylesheet"
+        type="text/css" />
+  <link href="monogram.html.css"
+        rel="stylesheet"
+        type="text/css" />
 </head>
 <body>
 
 <section id="app">
   <header>
     <aside>
-      <input type="checkbox" id="chkColorMode" v-model="colorMode">
+      <input id="chkColorMode" type="checkbox" v-model="colorMode">
       <label for="chkColorMode">Activer le mode coloration</label>
     </aside>
   </header>
 
-  <article id="container" :style="`zoom: ${zoom}%`">
-    <!-- Indices du haut -->
-    <div id="caseIndiceT_First"></div>
-    <div class="caseIndiceT noselect" v-for="c in 25" :key="c" :id="`indiceT_${c}`"></div>
-
-    <!-- Grille -->
-    <div class="ligne" v-for="l in 25" :key="l">
-      <span v-for="c in 25" :key="c">
-        <!-- Indices de gauche -->
-        <div class="caseIndiceL noselect" v-if="c === 1" :id="`indiceL_${l}`"></div>
-        <!-- Cases de la ligne -->
-        <div class="case" :id="`case_${l}_${c}`"
-             @mousedown="mouseDown"
-             @mouseup="mouseUp"
-             @mouseover="colorize"></div>
-      </span>
-    </div>
+  <article :style="`zoom: ${zoom}%`" id="container">
+    <table @mousedown="mouseDown"
+           @mouseup="mouseUp"
+           class="no-select">
+      <tr>
+        <th class="caseTopLeft"></th>
+        <th :id="`indiceT_${c}`" :key="c" class="caseTop" v-for="c in 25"></th>
+      </tr>
+      <tr :key="l" v-for="l in 25">
+        <th :id="`indiceL_${l}`" class="caseLeft"></th>
+        <td :id="`case_${l}_${c}`" :key="c" @mouseover="colorize" class="case"
+            v-for="c in 25"></td>
+      </tr>
+    </table>
   </article>
 
   <footer>
-    <nav>
+    <nav id="toolbar">
       <button @click="resetGrid">Vider la grille</button>
       <button @click="exportGrid">Exporter la grille</button>
       <button @click="zoomOut">Zoom -</button>
       <button @click="zoomIn">Zoom +</button>
-      <input type="file" @change="loadImage" accept="image/*" placeholder="Charger une image">
+      <input @change="loadImage" accept="image/*" placeholder="Charger une image" type="file">
     </nav>
   </footer>
 
-  <canevas width="25" height="25" id="previewCanevas">
+  <canevas height="25" id="previewCanevas" width="25">
     Désolé, votre navigateur ne supporte pas les canevas HTML5.
   </canevas>
 </section>
@@ -112,18 +112,18 @@
             const targetId = event.currentTarget.id
             const targetDiv = event.target
             if (this.colorMode) {
-              targetDiv.classList.add('blackBg')
+              targetDiv.classList.add('filledCell')
               this.coloredCells.push(targetDiv)
             } else {
-              targetDiv.classList.remove('blackBg')
+              targetDiv.classList.remove('filledCell')
             }
           }
         },
       },
       mounted() {
         // Init top and left cells
-        self.casesIndiceT = document.querySelectorAll('.caseIndiceT')
-        self.casesIndiceL = document.querySelectorAll('.caseIndiceL')
+        self.casesIndiceT = document.querySelectorAll('.caseTop')
+        self.casesIndiceL = document.querySelectorAll('.caseLeft')
       },
     })
     // Monter l'application

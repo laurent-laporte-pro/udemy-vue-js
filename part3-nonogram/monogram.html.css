@@ -1,0 +1,99 @@
+/*
+ * CSS for the nonogram game
+ */
+:root {
+    --background: #1a1a1a;
+    --cell-size: 24px;
+    --cell-color: #b28135;
+    --fill-color: rgba(100, 100, 100, 0.75);
+    --vert-gutter-image: linear-gradient(to bottom, transparent, #5e4217);
+    --hori-gutter-image: linear-gradient(to right, transparent, #5e4217);
+    --gutter-min-size: calc(var(--cell-size) * 5);
+    --gutter-size: calc(var(--cell-size) * 6);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--cell-color);
+    font-family: 'Roboto', sans-serif;
+}
+
+#app {
+    min-width: 903px;
+}
+
+#chkColorMode {
+    width: 20px;
+    height: 20px;
+}
+
+header aside label {
+    position: relative;
+    top: -5px;
+}
+
+#container {
+    width: 1160px;
+}
+
+.filledCell {
+    background-color: var(--fill-color);
+}
+
+.case {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid var(--cell-color);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.case:hover {
+    cursor: pointer;
+}
+
+.caseTopLeft {
+    border-top: none;
+    border-left: none;
+}
+
+.caseTop, .caseLeft {
+    border: 1px solid;
+}
+
+.caseTop {
+    height: var(--gutter-size);
+    min-height: var(--gutter-min-size);
+    text-align: center;
+    vertical-align: bottom;
+    border-top: none;
+    border-image: var(--vert-gutter-image) 1;
+}
+
+.caseLeft {
+    width: var(--gutter-size);
+    min-width: var(--gutter-min-size);
+    text-align: right;
+    vertical-align: center;
+    border-left: none;
+    border-image: var(--hori-gutter-image) 1;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#toolbar {
+    display: block;
+}
+
+button {
+    margin-right: 10px;
+    margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
