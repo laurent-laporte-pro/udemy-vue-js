@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeu de Picross</title>
+  <script defer src="vue.global.prod.js"></script>
+  <script defer src="html2canvas.min.js"></script>
+  <link type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+        rel="stylesheet" />
+</head>
+<body>
+
+<div id="app">
+  <canevas width="25" height="25" id="previewCanevas">
+    Désolé, votre navigateur ne supporte pas les canevas HTML5.
+  </canevas>
+</div>
+
+<script type="text/javascript">
+  window.onload = function () {
+    const vueLoaded = typeof Vue !== 'undefined'
+
+    if (vueLoaded) {
+      console.log('Vue version :', Vue.version)
+    } else {
+      throw new Error('Vue n’est pas chargé !')
+    }
+
+    const app = Vue.createApp({
+      data() {
+        return {
+          message: 'Application chargée !',
+        }
+      },
+      mounted() {
+        console.log('Vue est monté !')
+      },
+    })
+
+    // Monter l'application
+    app.mount('#app')
+  }
+</script>
+</body>
+</html>
