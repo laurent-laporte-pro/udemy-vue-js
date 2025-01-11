@@ -107,7 +107,93 @@
           this.resetCanvas()
         },
         exportGrid: function () {
+          this.mouseUp()
+          this.resetHeaders()
+          this.resetCanvas()
+          const matrix = this.calcMatrix()
+          this.fillHeaders(matrix)
+          this.fillCanvas(matrix)
+          this.exportImage()
           console.log('Grille exportée')
+        },
+        calcMatrix: function () {
+          const matrix = []
+          for (let l = 1; l <= 25; l++) {
+            matrix[l] = []
+            for (let c = 1; c <= 25; c++) {
+              const cell = document.getElementById(`case_${l}_${c}`)
+              matrix[l][c] = cell.classList.contains('filledCell') ? 1 : 0
+            }
+          }
+          console.log('Matrice:', matrix)
+          return matrix
+        },
+        fillHeaders: function (matrix) {
+          for (let l = 1; l <= 25; l++) {
+            this.tableauLigDeCases[l] = []
+            let count = 0
+            for (let c = 1; c <= 25; c++) {
+              if (matrix[l][c] === 1) {
+                count++
+              } else if (count > 0) {
+                this.tableauLigDeCases[l].push(count)
+                count = 0
+              }
+            }
+            if (count > 0) {
+              this.tableauLigDeCases[l].push(count)
+            }
+          }
+          for (let c = 1; c <= 25; c++) {
+            this.tableauColDeCases[c] = []
+            let count = 0
+            for (let l = 1; l <= 25; l++) {
+              if (matrix[l][c] === 1) {
+                count++
+              } else if (count > 0) {
+                this.tableauColDeCases[c].push(count)
+                count = 0
+              }
+            }
+            if (count > 0) {
+              this.tableauColDeCases[c].push(count)
+            }
+          }
+          this.fillHeadersHTML()
+        },
+        fillHeadersHTML: function () {
+          for (let i = 1; i <= 25; i++) {
+            this.topCells[i - 1].innerHTML = this.tableauColDeCases[i].join('<br/>')
+            this.leftCells[i - 1].innerHTML = this.tableauLigDeCases[i].join(' ')
+          }
+        },
+        fillCanvas: function (matrix) {
+          const canvas = document.getElementById('previewCanvas')
+          if (canvas.getContext) {
+            canvas.width = 500
+            canvas.height = 500
+            const ctx = canvas.getContext('2d')
+            for (let l = 1; l <= 25; l++) {
+              for (let c = 1; c <= 25; c++) {
+                if (matrix[l][c] === 1) {
+                  ctx.fillStyle = 'black'
+                  ctx.fillRect((c - 1) * 20, (l - 1) * 20, 20, 20)
+                }
+              }
+            }
+          } else {
+            console.error('Impossible de récupérer le contexte du canvas')
+          }
+        },
+        exportImage: function () {
+          const canvas = document.getElementById('previewCanvas')
+          html2canvas(canvas).then(canvas => {
+            const img = canvas.toDataURL('image/png')
+            const a = document.createElement('a')
+            a.href = img
+            a.download = 'picross.png'
+            a.click()
+          })
         },
         zoomOut: function () {
           this.mouseUp()
