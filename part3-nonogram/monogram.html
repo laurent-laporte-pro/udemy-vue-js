@@ -12,11 +12,19 @@
 </head>
 <body>
 
-<div id="app">
+<section id="app">
+  <nav>
+    <button @click="resetGrid">Vider la grille</button>
+    <button @click="exportGrid">Exporter la grille</button>
+    <button @click="zoomOut">Zoom -</button>
+    <button @click="zoomIn">Zoom +</button>
+    <input type="file" @change="loadImage" accept="image/*" placeholder="Charger une image">
+  </nav>
+
   <canevas width="25" height="25" id="previewCanevas">
     Désolé, votre navigateur ne supporte pas les canevas HTML5.
   </canevas>
-</div>
+</section>
 
 <script type="text/javascript">
   window.onload = function () {
@@ -31,14 +39,42 @@
     const app = Vue.createApp({
       data() {
         return {
-          message: 'Application chargée !',
+          zoom: 75,
+          isMouseDown: false,
         }
+      },
+      methods: {
+        resetGrid: function () {
+          console.log('Grille réinitialisée')
+        },
+        exportGrid: function () {
+          console.log('Grille exportée')
+        },
+        zoomOut: function () {
+          this.mouseUp()
+          this.zoom = Math.max(65, this.zoom - 5)
+          console.log('Zoom:', this.zoom, 'isMouseDown:', this.isMouseDown)
+        },
+        zoomIn: function () {
+          this.mouseUp()
+          this.zoom = Math.min(100, this.zoom + 5)
+          console.log('Zoom:', this.zoom, 'isMouseDown:', this.isMouseDown)
+        },
+        loadImage: function (event) {
+          const file = event.target.files[0]
+          console.log('Image chargée:', file)
+        },
+        mouseDown: function (event) {
+          this.isMouseDown = true
+        },
+        mouseUp: function (event) {
+          this.isMouseDown = false
+        },
       },
       mounted() {
         console.log('Vue est monté !')
       },
     })
-
     // Monter l'application
     app.mount('#app')
   }
