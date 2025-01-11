@@ -57,11 +57,11 @@ header aside label {
     border-left: none;
 }
 
-.caseTop, .caseLeft {
+.topCell, .leftCell {
     border: 1px solid;
 }
 
-.caseTop {
+.topCell {
     height: var(--gutter-size);
     min-height: var(--gutter-min-size);
     text-align: center;
@@ -70,7 +70,7 @@ header aside label {
     border-image: var(--vert-gutter-image) 1;
 }
 
-.caseLeft {
+.leftCell {
     width: var(--gutter-size);
     min-width: var(--gutter-min-size);
     text-align: right;

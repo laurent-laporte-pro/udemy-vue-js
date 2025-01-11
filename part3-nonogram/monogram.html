@@ -29,10 +29,10 @@
            class="no-select">
       <tr>
         <th class="caseTopLeft"></th>
-        <th :id="`indiceT_${c}`" :key="c" class="caseTop" v-for="c in 25"></th>
+        <th :id="`indiceT_${c}`" :key="c" class="topCell" v-for="c in 25"></th>
       </tr>
       <tr :key="l" v-for="l in 25">
-        <th :id="`indiceL_${l}`" class="caseLeft"></th>
+        <th :id="`indiceL_${l}`" class="leftCell"></th>
         <td :id="`case_${l}_${c}`" :key="c" @mouseover="colorize" class="case"
             v-for="c in 25"></td>
       </tr>
@@ -41,7 +41,7 @@
 
   <footer>
     <nav id="toolbar">
-      <button @click="resetGrid">Vider la grille</button>
+      <button @click="resetAll">Vider la grille</button>
       <button @click="exportGrid">Exporter la grille</button>
       <button @click="zoomOut">Zoom -</button>
       <button @click="zoomIn">Zoom +</button>
@@ -49,9 +49,9 @@
     </nav>
   </footer>
 
-  <canevas height="25" id="previewCanevas" width="25">
-    Désolé, votre navigateur ne supporte pas les canevas HTML5.
-  </canevas>
+  <canvas height="25" id="previewCanvas" width="25">
+    Désolé, votre navigateur ne supporte pas les canvas HTML5.
+  </canvas>
 </section>
 
 <script type="text/javascript">
@@ -76,13 +76,35 @@
           // Pour stocker les indices de la grille
           tableauColDeCases: [],
           tableauLigDeCases: [],
-          casesIndiceT: [],
-          casesIndiceL: [],
+          topCells: [],
+          leftCells: [],
         }
       },
       methods: {
+        resetHeaders: function () {
+          this.topCells.forEach(cell => cell.innerHTML = '')
+          this.leftCells.forEach(cell => cell.innerHTML = '')
+        },
         resetGrid: function () {
-          console.log('Grille réinitialisée')
+          const cells = document.querySelectorAll('.case')
+          cells.forEach(cell => cell.innerHTML = '')
+          this.coloredCells.forEach(cell => cell.classList.remove('filledCell'))
+          this.coloredCells = []
+          this.coloredCellsLoaded = []
+        },
+        resetCanvas: function () {
+          const canvas = document.getElementById('previewCanvas')
+          if (canvas.getContext) {
+            const ctx = canvas.getContext('2d')
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+          } else {
+            console.error('Impossible de récupérer le contexte du canvas')
+          }
+        },
+        resetAll: function () {
+          this.resetHeaders()
+          this.resetGrid()
+          this.resetCanvas()
         },
         exportGrid: function () {
           console.log('Grille exportée')
@@ -122,8 +144,8 @@
       },
       mounted() {
         // Init top and left cells
-        self.casesIndiceT = document.querySelectorAll('.caseTop')
-        self.casesIndiceL = document.querySelectorAll('.caseLeft')
+        this.topCells = document.querySelectorAll('.topCell')
+        this.leftCells = document.querySelectorAll('.leftCell')
       },
     })
     // Monter l'application
