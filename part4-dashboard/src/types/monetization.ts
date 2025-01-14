@@ -34,3 +34,21 @@ export interface MonetizationData {
 export interface MonetizationResponse {
   data: MonetizationData[];
 }
+
+export interface GroupedMonetizationData {
+  [key: string]: number | string | undefined;
+  app: string;
+  totalRevenues: number;
+  totalRevenuesAU: number;
+  totalRevenuesCN: number;
+  totalRevenuesFR: number;
+  totalRevenuesJP: number;
+  totalRevenuesUK: number;
+  totalRevenuesUS: number;
+  views: number;
+  conversions: number;
+  rewarded: number;
+  banner: number;
+  fullscreen: number;
+  video: number;
+}

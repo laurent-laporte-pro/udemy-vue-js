@@ -55,7 +55,7 @@
               <p v-if="dashboardLoading">
                 Loading dashboard…
               </p>
-              <pre v-else>{{ monetizationData }}</pre>
+              <pre v-else>{{ groupedData }}</pre>
             </v-sheet>
             <v-sheet
               v-else-if="selectedTab === 'about'"
@@ -91,8 +91,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import type { MonetizationData } from '@/types/monetization'
+import { onMounted, ref, watch } from 'vue'
+import type { GroupedMonetizationData, MonetizationData } from '@/types/monetization'
 import { MonetizationService } from '@/services/monetizationService'
 
 // Gestion des onglets de navigation
@@ -114,5 +114,11 @@ onMounted(async () => {
   } finally {
     dashboardLoading.value = false
   }
+})
+
+const groupedData = ref<GroupedMonetizationData[]>([])
+
+watch(monetizationData, (newData) => {
+  groupedData.value = monetizationService.getDataByAppPlatform(newData)
 })
 </script>
