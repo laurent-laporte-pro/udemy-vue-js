@@ -55,7 +55,24 @@
               <p v-if="dashboardLoading">
                 Loading dashboard…
               </p>
-              <pre v-else>{{ groupedData }}</pre>
+              <v-data-table
+                v-else
+                :headers="monetizationService.headers"
+                :items="groupedData"
+                v-model:expanded="expandedApps"
+                item-key="app"
+                item-value="app"
+                show-expand
+              >
+                <template v-slot:header.app="{ column }">{{ column.title?.toUpperCase() || '' }}</template>
+                <template v-slot:item.totalRevenuesAU="{ item }">{{ dollarFormatter(item.totalRevenuesAU) }}</template>
+                <template v-slot:item.totalRevenuesCN="{ item }">{{ dollarFormatter(item.totalRevenuesCN) }}</template>
+                <template v-slot:item.totalRevenuesFR="{ item }">{{ dollarFormatter(item.totalRevenuesFR) }}</template>
+                <template v-slot:item.totalRevenuesJP="{ item }">{{ dollarFormatter(item.totalRevenuesJP) }}</template>
+                <template v-slot:item.totalRevenuesUK="{ item }">{{ dollarFormatter(item.totalRevenuesUK) }}</template>
+                <template v-slot:item.totalRevenuesUS="{ item }">{{ dollarFormatter(item.totalRevenuesUS) }}</template>
+                <template v-slot:item.totalRevenues="{ item }">{{ dollarFormatter(item.totalRevenues) }}</template>
+              </v-data-table>
             </v-sheet>
             <v-sheet
               v-else-if="selectedTab === 'about'"
@@ -121,4 +138,12 @@ const groupedData = ref<GroupedMonetizationData[]>([])
 watch(monetizationData, (newData) => {
   groupedData.value = monetizationService.getDataByAppPlatform(newData)
 })
+
+const dollarFormatter = (value: number): string => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+}
+
+// Set of expanded apps in the data table
+const expandedApps = ref<string[]>([])
+
 </script>

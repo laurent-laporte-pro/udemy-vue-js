@@ -6,6 +6,24 @@ import type { GroupedMonetizationData, MonetizationData, MonetizationResponse } 
 export class MonetizationService {
   private api: AxiosInstance
 
+  public headers: Array<Record<string, string>> = [
+    { title: 'App & Platform', align: 'start', key: 'app' },
+    { title: 'AU', align: 'end', key: 'totalRevenuesAU' },
+    { title: 'CN', align: 'end', key: 'totalRevenuesCN' },
+    { title: 'FR', align: 'end', key: 'totalRevenuesFR' },
+    { title: 'JP', align: 'end', key: 'totalRevenuesJP' },
+    { title: 'UK', align: 'end', key: 'totalRevenuesUK' },
+    { title: 'US', align: 'end', key: 'totalRevenuesUS' },
+    { title: 'Total', align: 'end', key: 'totalRevenues' },
+    { key: 'data-table-expand' }
+    // { title: 'Views', align: 'end', key: 'views' },
+    // { title: 'Conversions', align: 'end', key: 'conversions' },
+    // { title: 'Rewarded', align: 'end', key: 'rewarded' },
+    // { title: 'Banner', align: 'end', key: 'banner' },
+    // { title: 'Fullscreen', align: 'end', key: 'fullscreen' },
+    // { title: 'Video', align: 'end', key: 'video' },
+  ]
+
   constructor () {
     this.api = axios.create({
       baseURL: 'https://www.anthony-cardinale.fr/_placeholder',

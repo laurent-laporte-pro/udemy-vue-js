@@ -36,6 +36,12 @@ Les fonctions en JavaScript pourraient être plus simples en utilisant `forEach`
 `querySelectorAll` pour sélectionner des éléments, etc.
 Je pense que cette troisième partie peut être ignorée, car elle n’apporte pas grand-chose concernant Vue JS.
 
+Dans la quatrième partie, Anthony propose de créer un tableau de bord avec Vuetify.
+L’objectif est de créer un tableau de bord avec des widgets, des graphiques, etc.
+Anthony devrait expliquer l'intention derrière chaque notion introduite (par exemple, l'utilisation
+d'une colonne `data-table-expand` pour afficher des détails supplémentaires) au lieu de se concentrer
+uniquement sur le comment faire.
+
 De manière générale, les TP pourraient être plus simples en utilisant les balises sémantiques HTML 5.
 Anthony devrait améliorer son anglais et éviter les anglicismes inutiles.
 Le nommage des classes CSS et des variables JavaScript devrait être plus explicite.
