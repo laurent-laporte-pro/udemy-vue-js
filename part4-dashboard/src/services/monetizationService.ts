@@ -4,8 +4,6 @@ import axios from 'axios'
 import type { GroupedMonetizationData, MonetizationData, MonetizationResponse } from '@/types/monetization'
 
 export class MonetizationService {
-  private api: AxiosInstance
-
   public headers: Array<Record<string, string>> = [
     { title: 'App & Platform', align: 'start', key: 'app' },
     { title: 'AU', align: 'end', key: 'totalRevenuesAU' },
@@ -23,6 +21,7 @@ export class MonetizationService {
     // { title: 'Fullscreen', align: 'end', key: 'fullscreen' },
     // { title: 'Video', align: 'end', key: 'video' },
   ]
+  private api: AxiosInstance
 
   constructor () {
     this.api = axios.create({

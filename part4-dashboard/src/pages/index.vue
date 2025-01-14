@@ -57,21 +57,46 @@
               </p>
               <v-data-table
                 v-else
+                v-model:expanded="expandedApps"
                 :headers="monetizationService.headers"
                 :items="groupedData"
-                v-model:expanded="expandedApps"
                 item-key="app"
                 item-value="app"
                 show-expand
               >
                 <template v-slot:header.app="{ column }">{{ column.title?.toUpperCase() || '' }}</template>
-                <template v-slot:item.totalRevenuesAU="{ item }">{{ dollarFormatter(item.totalRevenuesAU) }}</template>
-                <template v-slot:item.totalRevenuesCN="{ item }">{{ dollarFormatter(item.totalRevenuesCN) }}</template>
-                <template v-slot:item.totalRevenuesFR="{ item }">{{ dollarFormatter(item.totalRevenuesFR) }}</template>
-                <template v-slot:item.totalRevenuesJP="{ item }">{{ dollarFormatter(item.totalRevenuesJP) }}</template>
-                <template v-slot:item.totalRevenuesUK="{ item }">{{ dollarFormatter(item.totalRevenuesUK) }}</template>
-                <template v-slot:item.totalRevenuesUS="{ item }">{{ dollarFormatter(item.totalRevenuesUS) }}</template>
-                <template v-slot:item.totalRevenues="{ item }">{{ dollarFormatter(item.totalRevenues) }}</template>
+                <template v-slot:item.totalRevenuesAU="{ item }">{{ formatDollar(item.totalRevenuesAU) }}</template>
+                <template v-slot:item.totalRevenuesCN="{ item }">{{ formatDollar(item.totalRevenuesCN) }}</template>
+                <template v-slot:item.totalRevenuesFR="{ item }">{{ formatDollar(item.totalRevenuesFR) }}</template>
+                <template v-slot:item.totalRevenuesJP="{ item }">{{ formatDollar(item.totalRevenuesJP) }}</template>
+                <template v-slot:item.totalRevenuesUK="{ item }">{{ formatDollar(item.totalRevenuesUK) }}</template>
+                <template v-slot:item.totalRevenuesUS="{ item }">{{ formatDollar(item.totalRevenuesUS) }}</template>
+                <template v-slot:item.totalRevenues="{ item }">{{ formatDollar(item.totalRevenues) }}</template>
+                <template v-slot:expanded-row="{ columns, item }">
+                  <tr>
+                    <td :colspan="columns.length" style="padding: 15px">
+                      <v-row>
+                        <v-col>The country which performed the best is {{ getBestCountryRevenue(item) }}</v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          Total ads views: <b>{{ item.views }}</b><br />
+                          Total ads conversion: <b>{{ item.conversions }}</b><br />
+                          Conversions percent: <b>{{
+                            item.views ? formatPercent(item.conversions / item.views) : ''
+                          }}</b><br />
+                          Total revenues: <b>{{ formatDollar(item.totalRevenues) }}</b>
+                        </v-col>
+                        <v-col>
+                          Total rewarded revenues: <b>{{ formatDollar(item.rewarded) }}</b><br />
+                          Total banner revenues: <b>{{ formatDollar(item.banner) }}</b><br />
+                          Total fullscreen revenues: <b>{{ formatDollar(item.fullscreen) }}</b><br />
+                          Total video revenues: <b>{{ formatDollar(item.video) }}</b>
+                        </v-col>
+                      </v-row>
+                    </td>
+                  </tr>
+                </template>
               </v-data-table>
             </v-sheet>
             <v-sheet
@@ -109,7 +134,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import type { GroupedMonetizationData, MonetizationData } from '@/types/monetization'
+import { Country, type GroupedMonetizationData, type MonetizationData } from '@/types/monetization'
 import { MonetizationService } from '@/services/monetizationService'
 
 // Gestion des onglets de navigation
@@ -133,17 +158,35 @@ onMounted(async () => {
   }
 })
 
+// Grouped data by app and platform
 const groupedData = ref<GroupedMonetizationData[]>([])
 
 watch(monetizationData, (newData) => {
   groupedData.value = monetizationService.getDataByAppPlatform(newData)
 })
 
-const dollarFormatter = (value: number): string => {
+// Set of expanded apps in the data table
+const expandedApps = ref<string[]>([])
+
+const formatDollar = (value: number): string => {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
 }
 
-// Set of expanded apps in the data table
-const expandedApps = ref<string[]>([])
+const formatPercent = (x: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'percent',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1
+  }).format(x)
+}
+
+const getBestCountryRevenue = (item: GroupedMonetizationData): string => {
+  const countries = Object.values(Country)
+  const revenues = countries.map((country) => item[`totalRevenues${country}`])
+  const bestCountryIndex = revenues.indexOf(Math.max(...revenues))
+  const bestCountry = countries[bestCountryIndex]
+  const bestRevenue = revenues[bestCountryIndex]
+  return `${bestCountry} with a total of ${formatDollar(bestRevenue)}`
+}
 
 </script>

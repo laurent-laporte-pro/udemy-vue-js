@@ -36,7 +36,6 @@ export interface MonetizationResponse {
 }
 
 export interface GroupedMonetizationData {
-  [key: string]: number | string | undefined;
   app: string;
   totalRevenues: number;
   totalRevenuesAU: number;
@@ -51,4 +50,6 @@ export interface GroupedMonetizationData {
   banner: number;
   fullscreen: number;
   video: number;
+
+  [key: string]: number | string | undefined;
 }
