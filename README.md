@@ -41,6 +41,8 @@ L’objectif est de créer un tableau de bord avec des widgets, des graphiques, 
 Anthony devrait expliquer l'intention derrière chaque notion introduite (par exemple, l'utilisation
 d'une colonne `data-table-expand` pour afficher des détails supplémentaires) au lieu de se concentrer
 uniquement sur le comment faire.
+Il serait préférable d'éviter d'utiliser les mêmes noms de composants que ceux des bibliothèques externes,
+comme `BarChart`, pour éviter une confusion.
 
 De manière générale, les TP pourraient être plus simples en utilisant les balises sémantiques HTML 5.
 Anthony devrait améliorer son anglais et éviter les anglicismes inutiles.
