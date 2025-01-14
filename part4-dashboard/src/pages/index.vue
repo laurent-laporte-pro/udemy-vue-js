@@ -46,7 +46,29 @@
               min-height="70vh"
               rounded="lg"
             >
-              <h1>My Dashboard</h1>
+              <h1>Applications</h1>
+
+              <!-- KPI overview -->
+              <v-row>
+                <v-col>
+                  <KpiBlock title="Total Android Revenues"
+                            :value="getTotalOsRevenues(Platform.Android)"
+                            :is-positive="false" />
+                </v-col>
+                <v-col>
+                  <KpiBlock title="Total iOS Revenues"
+                            :value="getTotalOsRevenues(Platform.iOS)"
+                            :is-positive="true" />
+                </v-col>
+                <v-col>
+                  <KpiBlock title="Total Revenues"
+                            :value="getTotalOsRevenues()"
+                            :is-positive="true" />
+                </v-col>
+              </v-row>
+
+              <v-divider class="my-4" />
+
               <v-progress-linear
                 v-if="dashboardLoading"
                 color="primary"
@@ -112,10 +134,11 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { type GroupedMonetizationData, type MonetizationData } from '@/types/monetization'
+import { type GroupedMonetizationData, type MonetizationData, Platform } from '@/types/monetization'
 import { MonetizationService } from '@/services/monetizationService'
 import { formatDollar } from '@/utils'
 import ExpandedRow from '@/components/ExpandedRow.vue'
+import KpiBlock from '@/components/KpiCard.vue'
 
 // Gestion des onglets de navigation
 const selectedTab = ref('one')
@@ -147,5 +170,12 @@ watch(monetizationData, (newData) => {
 
 // Set of expanded apps in the data table
 const expandedApps = ref<string[]>([])
+
+const getTotalOsRevenues = (platform?: Platform): number => {
+  const reducer = (total: number, data: MonetizationData) => total + data.revenue
+  return monetizationData.value
+    .filter((data) => platform === undefined || data.platform === platform)
+    .reduce(reducer, 0)
+}
 
 </script>

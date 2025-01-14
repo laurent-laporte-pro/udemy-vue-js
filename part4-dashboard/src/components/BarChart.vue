@@ -14,7 +14,7 @@ const props: BarChartProps = defineProps<BarChartProps>()
 </script>
 
 <template>
-  <div id="app" style="width: 500px">
+  <div class="bar-chart">
     <Bar
       :data="{
         labels: props.labels,
@@ -42,5 +42,7 @@ const props: BarChartProps = defineProps<BarChartProps>()
 </template>
 
 <style scoped>
-
+.bar-chart {
+  width: 500px;
+}
 </style>
