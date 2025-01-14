@@ -32,7 +32,7 @@
             cols="12"
             sm="2"
           >
-            <aside>foo</aside>
+            <SearchForm @update:searchValue="updateSearchedValue" />
           </v-col>
 
           <!-- main content -->
@@ -82,6 +82,7 @@
                 v-model:expanded="expandedApps"
                 :headers="monetizationService.headers"
                 :items="groupedData"
+                :search="searchedValue"
                 item-key="app"
                 item-value="app"
                 show-expand
@@ -124,7 +125,7 @@
             cols="12"
             sm="2"
           >
-            <aside>Bar</aside>
+            <ContactForm />
           </v-col>
         </v-row>
       </v-container>
@@ -139,6 +140,8 @@ import { MonetizationService } from '@/services/monetizationService'
 import { formatDollar } from '@/utils'
 import ExpandedRow from '@/components/ExpandedRow.vue'
 import KpiBlock from '@/components/KpiCard.vue'
+import SearchForm from '@/components/SearchForm.vue'
+import ContactForm from '@/components/ContactForm.vue'
 
 // Gestion des onglets de navigation
 const selectedTab = ref('one')
@@ -150,6 +153,7 @@ const links = [
 // Gestion de la table de MonetizationData
 const monetizationData = ref<MonetizationData[]>([])
 const dashboardLoading = ref<boolean>(false)
+const searchedValue = ref<string>('')
 const monetizationService = new MonetizationService()
 
 onMounted(async () => {
@@ -176,6 +180,10 @@ const getTotalOsRevenues = (platform?: Platform): number => {
   return monetizationData.value
     .filter((data) => platform === undefined || data.platform === platform)
     .reduce(reducer, 0)
+}
+
+const updateSearchedValue = (value: string) => {
+  searchedValue.value = value
 }
 
 </script>

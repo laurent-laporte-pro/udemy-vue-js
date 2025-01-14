@@ -14,12 +14,6 @@ export class MonetizationService {
     { title: 'US', align: 'end', key: 'totalRevenuesUS' },
     { title: 'Total', align: 'end', key: 'totalRevenues' },
     { key: 'data-table-expand' }
-    // { title: 'Views', align: 'end', key: 'views' },
-    // { title: 'Conversions', align: 'end', key: 'conversions' },
-    // { title: 'Rewarded', align: 'end', key: 'rewarded' },
-    // { title: 'Banner', align: 'end', key: 'banner' },
-    // { title: 'Fullscreen', align: 'end', key: 'fullscreen' },
-    // { title: 'Video', align: 'end', key: 'video' },
   ]
   private api: AxiosInstance
 
