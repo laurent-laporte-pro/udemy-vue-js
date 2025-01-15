@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div id="about-me">
@@ -23,6 +21,7 @@
         class="text-highlight-2">Laval</em>, <em class="text-highlight-2">Rennes</em> et
       <em class="text-highlight-2">Paris</em>, et ouvert au télétravail.
     </p>
+    <p>Contactez moi&nbsp;!</p>
   </div>
 </template>
 
