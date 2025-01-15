@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import PortfolioMain from './pages/PortfolioMain.vue'
 import PageHeader from './components/PageHeader.vue'
 </script>
 
@@ -8,7 +7,7 @@ import PageHeader from './components/PageHeader.vue'
     <PageHeader />
   </header>
   <main>
-    <PortfolioMain />
+    <RouterView />
   </main>
 </template>
 

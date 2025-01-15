@@ -64,7 +64,9 @@ const closeDialog = (event: Event) => {
       </p>
     </form>
     <footer>
-      <nav>Retour à l'accueil</nav>
+      <nav>
+        <RouterLink to="/">Retour à l'accueil</RouterLink>
+      </nav>
     </footer>
   </main>
   <section v-if="dialog" class="dialog">
