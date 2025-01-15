@@ -1,4 +1,5 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+</script>
 
 <template>
   <div id="about-me">
@@ -22,7 +23,9 @@
       <em class="text-highlight-2">Paris</em>, et ouvert au télétravail.
     </p>
     <nav>
-      <RouterLink to="/contact">Contactez moi&nbsp;!</RouterLink>
+      <router-link to="/contact/me" class="contact-link">Contactez moi&nbsp;!</router-link>
+      <router-link to="/contact/webmaster" class="contact-link">Web master</router-link>
+      <router-link to="/contact/sav" class="contact-link">SAV</router-link>
     </nav>
   </div>
 </template>
@@ -34,5 +37,25 @@
 
 #about-me p {
   margin-bottom: 1em;
+}
+
+nav {
+  display: flex;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.contact-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--vt-c-custom-text-1);
+  color: white;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.contact-link:hover {
+  background-color: var(--vt-c-custom-text-2);
 }
 </style>
